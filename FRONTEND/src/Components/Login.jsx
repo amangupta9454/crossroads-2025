@@ -16,7 +16,7 @@ const Login = () => {
     setError('');
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const res = await axios.post('https://crossroads-2025.onrender.com/api/auth/login', { email, password });
       localStorage.setItem('userInfo', JSON.stringify(res.data));
       navigate('/dashboard');
     } catch (err) {

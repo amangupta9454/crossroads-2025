@@ -21,7 +21,7 @@ const Dashboard = () => {
             Authorization: `Bearer ${userInfo.token}`,
           },
         };
-        const res = await axios.get('http://localhost:5000/api/auth/profile', config);
+        const res = await axios.get('https://crossroads-2025.onrender.com/api/auth/profile', config);
         setUser(res.data);
       } catch  {
         localStorage.removeItem('userInfo');

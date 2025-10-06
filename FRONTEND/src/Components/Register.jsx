@@ -18,7 +18,7 @@ const Register = () => {
     setError('');
 
     try {
-      await axios.post('http://localhost:5000/api/auth/register', { name, email, mobile, password });
+      await axios.post('https://crossroads-2025.onrender.com/api/auth/register', { name, email, mobile, password });
       navigate('/login');
     } catch (err) {
       setError(err.response.data.message || 'Registration failed');
