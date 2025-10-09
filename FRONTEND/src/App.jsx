@@ -9,10 +9,12 @@ import Event from './Components/Event';
 import Contact from './Components/Contact';
 import Footer from './Components/Footer';
 import Schedule from './Components/Schedule';
+import Navbar from './Components/Navbar';
 const App = () => {
   return (
     <div>
       <BrowserRouter>
+      <Navbar />
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/events' element={<Event />} />
