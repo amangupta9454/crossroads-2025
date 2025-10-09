@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,  useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Calendar, MapPin, Trophy, Users, X, Sparkles, ChevronRight } from 'lucide-react';
 import event1 from '../assets/coding.jpg';
 import event2 from '../assets/project.jpg';
 import event3 from '../assets/robo.jpg';
@@ -31,6 +33,7 @@ const events = [
     id: 1,
     imageSrc: event1,
     name: 'Code Puzzle',
+    category: 'Technical',
     details: {
       description: 'A coding quiz to challenge logical and programming skills.',
       timing: 'April 20, 2025, 9:00 AM - April 21, 2025, 9:00 AM',
@@ -43,6 +46,7 @@ const events = [
     id: 2,
     imageSrc: event2,
     name: 'Project Exhibition',
+    category: 'Technical',
     details: {
       description: 'Display and present innovative student projects across domains.',
       timing: 'April 22, 2025, 10:00 AM - 2:00 PM',
@@ -55,6 +59,7 @@ const events = [
     id: 3,
     imageSrc: event3,
     name: 'Robo Race',
+    category: 'Technical',
     details: {
       description: 'Compete with your robots in high-speed challenges.',
       timing: 'April 23, 2025, 1:00 PM - 5:00 PM',
@@ -67,6 +72,7 @@ const events = [
     id: 4,
     imageSrc: event4,
     name: 'Cultural Events',
+    category: 'Cultural',
     details: {
       description: 'Showcase of traditional and contemporary performances.',
       timing: 'April 24, 2025, 9:00 AM - 3:00 PM',
@@ -79,6 +85,7 @@ const events = [
     id: 5,
     imageSrc: event5,
     name: 'Rangoli Competition',
+    category: 'Cultural',
     details: {
       description: 'Create beautiful rangoli designs using vibrant colors.',
       timing: 'April 25, 2025, 10:00 AM - 4:00 PM',
@@ -91,6 +98,7 @@ const events = [
     id: 6,
     imageSrc: event6,
     name: 'Food Without Fire',
+    category: 'Cultural',
     details: {
       description: 'Prepare delicious dishes without using fire or heat.',
       timing: 'April 26, 2025, 9:00 AM - 5:00 PM',
@@ -103,6 +111,7 @@ const events = [
     id: 7,
     imageSrc: event7,
     name: 'Nukkad Natak',
+    category: 'Cultural',
     details: {
       description: 'Perform impactful street plays on social issues.',
       timing: 'April 27-28, 2025, 10:00 AM',
@@ -115,6 +124,7 @@ const events = [
     id: 8,
     imageSrc: event8,
     name: 'Singing',
+    category: 'Cultural',
     details: {
       description: 'Showcase your vocal talent across genres and languages.',
       timing: 'April 29, 2025, 11:00 AM - 3:00 PM',
@@ -127,6 +137,7 @@ const events = [
     id: 9,
     imageSrc: event9,
     name: 'Technical Poster',
+    category: 'Technical',
     details: {
       description: 'Present technical concepts and innovations through posters.',
       timing: 'April 30, 2025, 9:00 AM - 1:00 PM',
@@ -139,6 +150,7 @@ const events = [
     id: 10,
     imageSrc: event11,
     name: 'Inter College Dance Competition',
+    category: 'Cultural',
     details: {
       description: 'Dance teams from various colleges compete with style and energy.',
       timing: 'April 30, 2025, 2:00 PM - 6:00 PM',
@@ -151,6 +163,7 @@ const events = [
     id: 11,
     imageSrc: event10,
     name: 'Rock Band',
+    category: 'Cultural',
     details: {
       description: 'Bands compete by performing electrifying live music sets.',
       timing: 'April 30, 2025, 6:30 PM - 9:30 PM',
@@ -163,6 +176,7 @@ const events = [
     id: 12,
     imageSrc: event11,
     name: 'Short Film Making',
+    category: 'Technical',
     details: {
       description: 'Create a short film showcasing storytelling, direction, and editing skills.',
       timing: 'May 1, 2025, 10:00 AM - 4:00 PM',
@@ -175,6 +189,7 @@ const events = [
     id: 13,
     imageSrc: event11,
     name: 'Ad Mad Show',
+    category: 'Cultural',
     details: {
       description: 'Create fun and creative advertisements for fictional products.',
       timing: 'May 2, 2025, 11:00 AM - 3:00 PM',
@@ -187,6 +202,7 @@ const events = [
     id: 14,
     imageSrc: event11,
     name: 'Treasure Hunt',
+    category: 'Technical',
     details: {
       description: 'Solve clues and find hidden items in a campus-wide adventure.',
       timing: 'May 3, 2025, 9:00 AM - 1:00 PM',
@@ -214,145 +230,361 @@ const winners = [
   { id: 14, imageSrc: w14, name: 'Winner 14' },
 ];
 
-const EventCard = ({ imageSrc, eventName, onClick }) => {
+const EventCard = ({ event, onClick, index }) => {
   const [loaded, setLoaded] = useState(false);
+  const cardRef = useRef(null);
 
   return (
-    <div className="group relative bg-gradient-to-br from-purple-700 via-indigo-600 to-blue-600 border-2 border-transparent rounded-3xl shadow-xl overflow-hidden transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 hover:shadow-[0_0_80px_rgba(255,255,255,0.4)] hover:ring-4 hover:ring-pink-500 animate-floating">
-      <div className="relative h-64 w-full overflow-hidden">
+    <motion.div
+      ref={cardRef}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      whileHover={{ y: -10 }}
+      className="group relative bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-2xl overflow-hidden border border-zinc-700/50 hover:border-orange-500/50 transition-all duration-500 cursor-pointer"
+      onClick={onClick}
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 via-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      
+      <div className="relative h-56 overflow-hidden">
         {!loaded && (
-          <div className="absolute inset-0 bg-gray-300 animate-pulse" />
+          <div className="absolute inset-0 bg-zinc-800 animate-pulse" />
         )}
-        <img
-          className={`w-full h-full object-cover group-hover:scale-115 transition-transform duration-700 ease-in-out drop-shadow-2xl ${loaded ? 'opacity-100' : 'opacity-0'}`}
-          src={imageSrc}
-          alt={eventName}
+        <motion.img
+          className={`w-full h-full object-cover transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+          src={event.imageSrc}
+          alt={event.name}
           onLoad={() => setLoaded(true)}
+          whileHover={{ scale: 1.1 }}
+          transition={{ duration: 0.6 }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80" />
+        
+        <div className="absolute top-3 right-3">
+          <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
+            event.category === 'Technical' 
+              ? 'bg-orange-500 text-white' 
+              : 'bg-purple-500 text-white'
+          }`}>
+            {event.category}
+          </span>
+        </div>
       </div>
-      <div className="p-6 text-center relative z-10 bg-gradient-to-b from-transparent to-black/30 rounded-b-3xl">
-        <h2 className="text-2xl font-extrabold text-white drop-shadow-xl group-hover:text-yellow-300 transition-all duration-300 tracking-wide">
-          {eventName}
-        </h2>
-        <button
-          onClick={onClick}
-          className="mt-4 px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-700 text-white font-semibold rounded-full shadow-lg hover:from-indigo-700 hover:to-purple-800 hover:scale-105 transition-all duration-300 hover:ring-2 hover:ring-pink-300"
-        >
-          Know More
-        </button>
-        <span className="absolute top-4 right-4 text-lg text-white opacity-0 group-hover:opacity-100 transition-all duration-500 animate-pulse">
-          ✨
-        </span>
+
+      <div className="p-5 relative z-10">
+        <h3 className="text-xl font-bold text-white mb-3 group-hover:text-orange-400 transition-colors duration-300">
+          {event.name}
+        </h3>
+        
+        <p className="text-sm text-zinc-400 mb-4 line-clamp-2">
+          {event.details.description}
+        </p>
+
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs text-zinc-500">
+            <Calendar className="w-4 h-4" />
+            <span className="line-clamp-1">November 2025</span>
+          </div>
+          
+          <motion.div
+            className="flex items-center gap-1 text-orange-500 text-sm font-semibold"
+            whileHover={{ x: 5 }}
+          >
+            <span>Details</span>
+            <ChevronRight className="w-4 h-4" />
+          </motion.div>
+        </div>
       </div>
-    </div>
+
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 via-purple-500 to-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+    </motion.div>
   );
 };
 
-const WinnerCard = ({ imageSrc, winnerName }) => {
+const WinnerCard = ({ winner, index }) => {
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <div className="group relative bg-gradient-to-br from-teal-700 via-cyan-600 to-blue-600 border-2 border-transparent rounded-3xl shadow-xl overflow-hidden transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 hover:shadow-[0_0_80px_rgba(255,255,255,0.4)] hover:ring-4 hover:ring-yellow-500 animate-floating">
-      <div className="relative h-64 w-full overflow-hidden">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.5, delay: index * 0.05 }}
+      whileHover={{ scale: 1.05, rotate: 2 }}
+      className="group relative bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-2xl overflow-hidden border border-zinc-700/50 hover:border-purple-500/50 transition-all duration-500"
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      
+      <div className="relative h-72 overflow-hidden">
         {!loaded && (
-          <div className="absolute inset-0 bg-gray-300 animate-pulse" />
+          <div className="absolute inset-0 bg-zinc-800 animate-pulse" />
         )}
-        <img
-          className={`w-full h-full object-cover group-hover:scale-115 transition-transform duration-700 ease-in-out drop-shadow-2xl ${loaded ? 'opacity-100' : 'opacity-0'}`}
-          src={imageSrc}
-          alt={winnerName}
+        <motion.img
+          className={`w-full h-full object-cover transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+          src={winner.imageSrc}
+          alt={winner.name}
           onLoad={() => setLoaded(true)}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
+        
+        <div className="absolute top-3 right-3">
+          <motion.div
+            animate={{ rotate: [0, 15, -15, 0] }}
+            transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+            className="bg-gradient-to-br from-yellow-400 to-orange-500 p-2 rounded-full"
+          >
+            <Trophy className="w-5 h-5 text-white" />
+          </motion.div>
+        </div>
       </div>
-      
-    </div>
+
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 via-orange-500 to-purple-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
+    </motion.div>
   );
 };
 
 const Events = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [filter, setFilter] = useState('All');
+
+  const filteredEvents = filter === 'All' 
+    ? events 
+    : events.filter(event => event.category === filter);
 
   return (
-    <div className="relative z-0 min-h-screen py-16 px-4 bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] overflow-hidden">
-      {/* Sparkling Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle,_#ffffff22_1px,_transparent_1px)] [background-size:20px_20px] opacity-20 pointer-events-none animate-pulse"></div>
+    <div className="relative min-h-screen bg-zinc-950 overflow-hidden">
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_center,_#ff6b1a15_0%,_transparent_65%)] pointer-events-none" />
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_80%_20%,_#8b5cf615_0%,_transparent_50%)] pointer-events-none" />
+      
+      <div className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="inline-block mb-4"
+            >
+              <Sparkles className="w-12 h-12 text-orange-500 mx-auto" />
+            </motion.div>
+            
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold mb-4">
+              <span className="text-orange-500">CROSS</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-600">ROADS</span>
+            </h1>
+            <p className="text-xl text-zinc-400 mt-4">Tech Fest 2025 Events</p>
+          </motion.div>
 
-      {/* Parallax Background */}
-      <div className="absolute inset-0 parallax-bg opacity-30" />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="flex justify-center gap-4 mb-12 flex-wrap"
+          >
+            {['All', 'Technical', 'Cultural'].map((category) => (
+              <motion.button
+                key={category}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setFilter(category)}
+                className={`px-6 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 ${
+                  filter === category
+                    ? 'bg-gradient-to-r from-orange-500 to-purple-600 text-white shadow-lg shadow-orange-500/30'
+                    : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 border border-zinc-700'
+                }`}
+              >
+                {category}
+              </motion.button>
+            ))}
+          </motion.div>
 
-      <h1 className="text-4xl sm:text-5xl font-extrabold text-center text-white drop-shadow-lg mb-12 animate-fade-in">
-        🎉 Upcoming Tech Events
-      </h1>
+          <motion.div 
+            layout
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-20"
+          >
+            <AnimatePresence mode="wait">
+              {filteredEvents.map((event, index) => (
+                <EventCard
+                  key={event.id}
+                  event={event}
+                  onClick={() => setSelectedEvent(event)}
+                  index={index}
+                />
+              ))}
+            </AnimatePresence>
+          </motion.div>
 
-      {/* Event Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto px-4">
-        {events.map((event) => (
-          <EventCard
-            key={event.id}
-            imageSrc={event.imageSrc}
-            eventName={event.name}
-            onClick={() => setSelectedEvent(event)}
-          />
-        ))}
-      </div>
-
-      {/* Winners Section */}
-      <div className="mt-16">
-        <h1 className="text-4xl sm:text-5xl font-extrabold text-center text-white drop-shadow-lg mb-12 animate-fade-in">
-          🏆 Winners of Tech Events 2024
-        </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto px-4">
-          {winners.map((winner) => (
-            <WinnerCard
-              key={winner.id}
-              imageSrc={winner.imageSrc}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="mt-24"
+          >
+            <div className="text-center mb-12">
+              <motion.div
+                initial={{ scale: 0 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="inline-block mb-4"
+              >
+                <Trophy className="w-12 h-12 text-purple-500 mx-auto" />
+              </motion.div>
               
-            />
-          ))}
+              <h2 className="text-4xl sm:text-5xl font-extrabold mb-4">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-purple-600">
+                  Hall of Fame
+                </span>
+              </h2>
+              <p className="text-xl text-zinc-400">Winners of Tech Fest 2024</p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+              {winners.map((winner, index) => (
+                <WinnerCard key={winner.id} winner={winner} index={index} />
+              ))}
+            </div>
+          </motion.div>
         </div>
       </div>
 
-      {/* Modal */}
-      {selectedEvent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm transition-all duration-300">
-          <div className="glassmorphism rounded-3xl p-6 sm:p-8 max-w-lg w-full mx-4 relative shadow-2xl animate-fade-in-up max-h-[85vh] overflow-y-auto">
-            <button
-              onClick={() => setSelectedEvent(null)}
-              className="absolute top-4 right-4 text-gray-200 hover:text-red-400 transition-colors"
+      <AnimatePresence>
+        {selectedEvent && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+            onClick={() => setSelectedEvent(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="relative bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-3xl p-12 sm:p-16 max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-zinc-700 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
             >
-              <svg className="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-6 text-center">{selectedEvent.name}</h3>
-            <div className="space-y-4 text-gray-200 text-sm sm:text-base leading-relaxed">
-              <p><strong>Description:</strong> {selectedEvent.details.description}</p>
-              <p><strong>Timing:</strong> {selectedEvent.details.timing}</p>
-              <p><strong>Location:</strong> {selectedEvent.details.location}</p>
-              <p><strong>Judging Criteria:</strong> {selectedEvent.details.judgingCriteria}</p>
-              <p><strong>Organizer:</strong> {selectedEvent.details.organizer}</p>
-            </div>
-
-            <div className="mt-6 flex flex-col sm:flex-row justify-center gap-4">
               <button
                 onClick={() => setSelectedEvent(null)}
-                className="px-6 py-3 bg-gradient-to-r from-pink-600 to-indigo-600 text-white font-semibold rounded-full hover:from-pink-700 hover:to-indigo-700 transition-all duration-300"
+                className="absolute top-12 right-4 p-2 rounded-full bg-zinc-800 hover:bg-red-500 text-zinc-400 hover:text-white transition-all duration-300 z-10"
               >
-                Close
+                <X className="w-5 h-5" />
               </button>
-              <Link
-                to="/registration"
-                className="px-6 py-3 bg-gradient-to-r from-green-500 to-teal-500 text-white font-semibold rounded-full hover:from-green-600 hover:to-teal-600 transition-all duration-300"
-              >
-                Register Now
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
+
+              <div className="relative h-64 rounded-2xl overflow-hidden mb-6">
+                <img
+                  src={selectedEvent.imageSrc}
+                  alt={selectedEvent.name}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4">
+                  <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                    selectedEvent.category === 'Technical' 
+                      ? 'bg-orange-500 text-white' 
+                      : 'bg-purple-500 text-white'
+                  }`}>
+                    {selectedEvent.category}
+                  </span>
+                </div>
+              </div>
+
+              <h3 className="text-3xl font-extrabold text-white mb-4 bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text ">
+                {selectedEvent.name}
+              </h3>
+
+              <div className="space-y-4 mb-6">
+                <div>
+                  <p className="text-zinc-400 leading-relaxed">
+                    {selectedEvent.details.description}
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-3 p-4 bg-zinc-800/50 rounded-xl border border-zinc-700/50">
+                  <Calendar className="w-5 h-5 text-orange-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-xs text-zinc-500 mb-1 font-semibold uppercase tracking-wide">Timing</p>
+                    <p className="text-sm text-zinc-300">{selectedEvent.details.timing}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-4 bg-zinc-800/50 rounded-xl border border-zinc-700/50">
+                  <MapPin className="w-5 h-5 text-purple-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-xs text-zinc-500 mb-1 font-semibold uppercase tracking-wide">Location</p>
+                    <p className="text-sm text-zinc-300">{selectedEvent.details.location}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-4 bg-zinc-800/50 rounded-xl border border-zinc-700/50">
+                  <Trophy className="w-5 h-5 text-orange-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-xs text-zinc-500 mb-1 font-semibold uppercase tracking-wide">Judging Criteria</p>
+                    <p className="text-sm text-zinc-300">{selectedEvent.details.judgingCriteria}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-4 bg-zinc-800/50 rounded-xl border border-zinc-700/50">
+                  <Users className="w-5 h-5 text-purple-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-xs text-zinc-500 mb-1 font-semibold uppercase tracking-wide">Organizer</p>
+                    <p className="text-sm text-zinc-300">{selectedEvent.details.organizer}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setSelectedEvent(null)}
+                  className="flex-1 px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold rounded-xl transition-all duration-300 border border-zinc-700"
+                >
+                  Close
+                </motion.button>
+                <Link to="/registration" className="flex-1">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full px-6 py-3 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-orange-500/30"
+                  >
+                    Register Now
+                  </motion.button>
+                </Link>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+        
+        .line-clamp-1 {
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        
+        .line-clamp-2 {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+      `}</style>
     </div>
   );
 };

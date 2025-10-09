@@ -1,428 +1,670 @@
-import { useEffect, useState, useRef } from "react";
-import logo from "/logo.jpeg";
-
-import { FaYoutube, FaWhatsapp, FaLinkedin, FaInstagram, FaEnvelope, FaArrowUp } from 'react-icons/fa';
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import harishImage from "../assets/sumit.jpg";
-import shauryaImage from "../assets/shauryasingh.jpg";
-import hod from "../assets/hod.png";
-import aadeshImage from "../assets/riddhi.jpg";
-import sahilKumarImage from "../assets/priya.jpg";
-import sahilVermaImage from "../assets/sahilverma.jpg";
-import swati from "../assets/swati.jpg";
+import { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
+import { Calendar, Sparkles, Ghost, Users, Briefcase, Activity, Star, Trophy, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
-  const [text, setText] = useState("");
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [countdown, setCountdown] = useState(""); // State for countdown timer
-  const title = "Crossroad 2025";
-  const aboutSectionRef = useRef(null);
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  });
 
-  // Countdown timer effect
+  const [openFAQ, setOpenFAQ] = useState(null);
+
+  const titleRef = useRef(null);
+  const dateRef = useRef(null);
+  const timerBoxRef = useRef(null);
+
   useEffect(() => {
-    const eventDate = new Date('2025-11-12T09:00:00+05:30'); // Event start: Nov 12, 2025, 9:00 AM IST
-    const interval = setInterval(() => {
+    const calculateTimeLeft = () => {
+      const eventDate = new Date('2025-11-28T00:00:00').getTime();
       const now = new Date().getTime();
-      const distance = eventDate.getTime() - now;
-      if (distance < 0) {
-        setCountdown('Event Started!');
-        clearInterval(interval);
-        return;
+      const difference = eventDate - now;
+
+      if (difference > 0) {
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+        setTimeLeft({ days, hours, minutes, seconds });
+      } else {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       }
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-      setCountdown(`${days}d ${hours}h ${minutes}m ${seconds}s`);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Scroll progress effect
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      setScrollProgress(scrollPercent);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    calculateTimeLeft();
+    const timer = setInterval(calculateTimeLeft, 1000);
+
+    return () => clearInterval(timer);
   }, []);
 
-  // Mouse movement effect
-  const handleMouseMove = (e) => {
-    setMousePosition({
-      x: (e.clientX / window.innerWidth) * 10 - 5,
-      y: (e.clientY / window.innerHeight) * 10 - 5,
-    });
-  };
-
-  // Text animation effect
-  useEffect(() => {
-    let i = 0;
-    const interval = setInterval(() => {
-      setText(title.slice(0, i));
-      i++;
-      if (i > title.length) clearInterval(interval);
-    }, 100);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Team member details
-  const teamMembers = [
-    { 
-      id: 1, 
-      name: "Sumit Prajapati", 
-      designation: "Robo Race", 
-      image: harishImage, 
-      linkedin: "https://www.linkedin.com/in/hareesh-jaiveer-singh-317aa4328/" 
+  const stats = [
+    {
+      icon: Users,
+      value: '100+',
+      label: 'Participants',
+      gradient: 'from-orange-600 to-orange-500',
+      bgGradient: 'from-orange-600/20 to-orange-500/10'
     },
-    { 
-      id: 2, 
-      name: "XYZ-UNKNOWN", 
-      designation: "Ad mad Show", 
-      image: shauryaImage, 
-      linkedin: "https://www.linkedin.com/in/shaurya-singh-9a13b9277" 
+    {
+      icon: Briefcase,
+      value: '10+',
+      label: 'Colleges',
+      gradient: 'from-purple-600 to-purple-500',
+      bgGradient: 'from-purple-600/20 to-purple-500/10'
     },
-    { 
-      id: 3, 
-      name: "Tripati Chaudhary", 
-      designation: "Technical Poster", 
-      image: hod, 
-      linkedin: "https://www.linkedin.com/in/alish-sirohi-5a591b299" 
+    {
+      icon: Activity,
+      value: '2+',
+      label: 'Workshops',
+      gradient: 'from-orange-600 to-orange-500',
+      bgGradient: 'from-orange-600/20 to-orange-500/10'
     },
-    { 
-      id: 4, 
-      name: "Riddhi Chauhan", 
-      designation: "Dance", 
-      image: aadeshImage, 
-      linkedin: "https://www.linkedin.com/in/aadesh-kumar-60a311304" 
-    },
-    { 
-      id: 5, 
-      name: "Priya", 
-      designation: "Code Puzzel ", 
-      image: sahilKumarImage, 
-      linkedin: "https://www.linkedin.com/in/sahil-kumar-a93439301" 
-    },
-    { 
-      id: 6, 
-      name: "Kapil Sharma", 
-      designation: "Project Exhibition", 
-      image: sahilVermaImage, 
-      linkedin: "https://www.linkedin.com/in/sahil-verma-957528310" 
-    },
-    { 
-      id: 7, 
-      name: "Swati Chaudhary", 
-      designation: "Food without Fire", 
-      image: swati, 
-      linkedin: "https://www.linkedin.com/in/tanu-jha-78029a347" 
-    },
+    {
+      icon: Star,
+      value: '10+',
+      label: 'Mentors',
+      gradient: 'from-purple-600 to-purple-500',
+      bgGradient: 'from-purple-600/20 to-purple-500/10'
+    }
   ];
 
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: { slidesToShow: 2, slidesToScroll: 1 }
-      },
-      {
-        breakpoint: 768,
-        settings: { slidesToShow: 1, slidesToScroll: 1 }
-      },
-    ],
+  const prizes = [
+    {
+      place: '2nd Place',
+      title: 'Silver Spell',
+      amount: '₹5,000',
+      color: 'purple',
+      gradient: 'from-purple-600 to-purple-500',
+      bgGradient: 'rgba(139, 92, 246, 0.05)',
+      borderColor: 'rgba(139, 92, 246, 0.3)',
+      rewards: [
+        'Cash prize',
+        'Certificates and Trophy',
+        'Exclusive Mentorship Sessions',
+        'Goodies'
+      ]
+    },
+    {
+      place: '1st Place',
+      title: 'Grand Sorcerer',
+      amount: '₹7,000',
+      color: 'orange',
+      gradient: 'from-orange-600 to-orange-500',
+      bgGradient: 'rgba(249, 115, 22, 0.05)',
+      borderColor: 'rgba(249, 115, 22, 0.4)',
+      isWinner: true,
+      rewards: [
+        'Cash prize',
+        'Certificates and Trophy',
+        'Exclusive Mentorship Sessions',
+        'Goodies'
+      ]
+    },
+    {
+      place: '3rd Place',
+      title: 'Bronze Witch',
+      amount: '₹3,000',
+      color: 'purple',
+      gradient: 'from-purple-600 to-purple-500',
+      bgGradient: 'rgba(139, 92, 246, 0.05)',
+      borderColor: 'rgba(139, 92, 246, 0.3)',
+      rewards: [
+        'Cash prize',
+        'Certificates and Trophy',
+        'Exclusive Mentorship Sessions',
+        'Goodies'
+      ]
+    }
+  ];
+
+ const faqs = [
+  {
+    question: 'What is CROSSROADS 2025?',
+    answer: 'CROSSROADS 2025 is our college’s annual technical and cultural fest featuring a blend of innovation, creativity, and talent. It includes exciting technical events like Project Exhibition, Robo Race, and Poster Presentation, along with cultural competitions such as Dance, Singing, Short Film, and many more.'
+  },
+  {
+    question: 'Who can participate in the fest?',
+    answer: 'Students from all colleges across India can participate in CROSSROADS 2025. Whether you are passionate about coding, robotics, arts, or performing, there’s an event for everyone!'
+  },
+  {
+    question: 'Is there any registration fee?',
+    answer: 'Most events are free to register. However, a few competitions may have a minimal entry fee to cover materials or logistics. Details about each event’s fee (if any) are mentioned in their respective registration sections.'
+  },
+  {
+    question: 'Can I participate in multiple events?',
+    answer: 'Yes, participants are allowed to register for multiple events as long as the event timings do not overlap. Make sure to check the event schedule before registering for multiple competitions.'
+  },
+  {
+    question: 'How can I register for the events?',
+    answer: 'You can register online through the official CROSSROADS 2025 website. Visit the event page, select your desired event, and fill out the registration form. Confirmation details will be shared via email.'
+  },
+  {
+    question: 'When and where will CROSSROADS 2025 be held?',
+    answer: 'CROSSROADS 2025 will take place on November 28–29, 2025, at our college campus. Detailed venue information and event schedules will be shared closer to the date.'
+  },
+  {
+    question: 'Are there any prizes for winners?',
+    answer: 'Yes! Attractive prizes, certificates, and trophies will be awarded to winners and outstanding participants across all technical and cultural events.'
+  },
+  {
+    question: 'Do participants need to bring anything?',
+    answer: 'Participants should bring their college ID cards, laptops or project materials (if applicable), and any specific items required for their event. All general arrangements such as WiFi, workspace, and refreshments will be provided.'
+  },
+  {
+    question: 'Will food and accommodation be provided?',
+    answer: 'Food and refreshments will be available at the venue. Limited accommodation facilities may be provided for outstation participants — please contact the organizing team in advance for arrangements.'
+  },
+  {
+    question: 'How can I stay updated about the fest?',
+    answer: 'All updates, schedules, and announcements will be shared on the official website and social media handles of CROSSROADS 2025. Make sure to follow us for the latest news!'
+  }
+];
+
+
+  const toggleFAQ = (index) => {
+    setOpenFAQ(openFAQ === index ? null : index);
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white overflow-x-hidden">
-      <div className="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-500 to-pink-500 z-50" style={{ width: `${scrollProgress}%` }} />
-      
-      <section className="relative flex items-center justify-center h-auto min-h-[40vh] w-full overflow-hidden px-6 py-20 md:py-28">
-        <div className="absolute w-72 h-72 bg-blue-500 rounded-full opacity-20 blur-[140px] top-10 left-5 md:w-[28rem] md:h-[28rem] animate-pulse"></div>
-        <div className="absolute w-72 h-72 bg-pink-500 rounded-full opacity-20 blur-[140px] bottom-10 right-5 md:w-[28rem] md:h-[28rem] animate-pulse"></div>
-        <div className="flex flex-col md:flex-row items-center justify-between w-full max-w-6xl flex-1 space-y-12 md:space-y-0">
-          <div className="text-center md:text-left space-y-8 max-w-lg">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-wide bg-gradient-to-r from-blue-400 to-pink-400 text-transparent bg-clip-text pt-14 transition-transform duration-300 hover:scale-105 animate-float">
-              {text}
-            </h1>
-            <div className="text-2xl font-bold text-cyan-400 animate-pulse">
-              Event Starts In: {countdown}
-            </div>
-            <div className="w-28 h-1 bg-gradient-to-r from-blue-500 to-pink-500 mx-auto md:mx-0 rounded-full"></div>
-            <p className="text-lg text-gray-300 leading-relaxed max-w-md md:max-w-xl text-justify">
-              Unleash your potential at the biggest <span className="text-blue-400 font-semibold">Tech Fest</span> of the year.  
-              <span className="text-pink-400 font-semibold"> Innovation, creativity, and excitement</span> — all in one place!
-            </p>
-          </div>
-          <div className="relative mt-8 md:mt-0 flex justify-center items-center">
-            <div className="absolute w-40 h-40 md:w-48 md:h-48 bg-white/10 backdrop-blur-xl rounded-full shadow-lg animate-pulse"></div>
-            <img src={logo} alt="Crossroad Logo" className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-52 md:h-52 object-cover rounded-full shadow-lg transition-transform duration-500 hover:scale-110 hover:rotate-6" />
-          </div>
-        </div>
-      </section>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white overflow-hidden relative">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-900/20 via-transparent to-transparent"></div>
 
-      <div className="w-full bg-gradient-to-r from-[#1a1a2e] via-[#16213e] to-[#0f3460] py-3 mt-[-20px]">
-        <marquee behavior="scroll" direction="left" scrollamount="8" className="text-white text-2xl font-bold tracking-wide uppercase hover:text-cyan-400 transition-colors duration-300">
-          🌟 Welcome to The Crossroad 2025! 🚀
-          Get ready for an electrifying experience! HIET Ghaziabad is thrilled to host the most exciting technical fest of the year from <span className="text-blue-400 font-bold">12th November to 15th November.</span> Mark your calendars, gather your squad, and dive into a world of innovation, creativity, and endless possibilities!
-          👉 Don't miss out —  <Link to="/registration" className="text-blue-500 hover:text-purple-600 underline ml-2">Register Now</Link>
-        </marquee>
+      <div className="absolute inset-0 opacity-10">
+        {[...Array(50)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-white rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              opacity: [0.2, 1, 0.2],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: Math.random() * 3 + 2,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+            }}
+          />
+        ))}
       </div>
 
-      <section ref={aboutSectionRef} className="relative py-16 px-6 sm:px-12 lg:px-16 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-black to-gray-900 animate-pulse"></div>
-        <div className="absolute inset-0 pointer-events-none">
-          {[...Array(10)].map((_, i) => (
-            <div key={i} className="absolute w-3 h-3 bg-blue-400 rounded-full opacity-75 animate-bounce" style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }}></div>
-          ))}
+      <div className="relative z-10 container mx-auto px-4 py-8 sm:py-12 flex flex-col items-center justify-center">
+        <motion.div
+          ref={dateRef}
+          className="mb-6 sm:mb-8 flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-orange-600 to-orange-500 px-4 sm:px-6 py-2 sm:py-3 rounded-full shadow-lg shadow-orange-600/50"
+          whileHover={{ scale: 1.05 }}
+        >
+          <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span className="font-semibold text-sm sm:text-base md:text-lg">November 28, 2025</span>
+          <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
+        </motion.div>
+
+        <div ref={titleRef} className="text-center mb-8 md:mb-12 px-2">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-tight whitespace-nowrap">
+            <span className="inline-block text-orange-500">C</span>
+            <span className="inline-block text-orange-500">R</span>
+            <span className="inline-block text-orange-500">O</span>
+            <span className="inline-block text-orange-500">S</span>
+            <span className="inline-block text-orange-500">S</span>
+            <span className="inline-block text-orange-500">R</span>
+            <span className="inline-block text-orange-500">O</span>
+            <span className="inline-block text-orange-500">A</span>
+            <span className="inline-block text-orange-500">D</span>
+            <span className="inline-block text-orange-500">S</span>
+            <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 ml-2 sm:ml-3 md:ml-4">2</span>
+            <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">0</span>
+            <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">2</span>
+            <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">5</span>
+          </h1>
         </div>
-        <div className="relative max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-900 to-black">
-  <div className="space-y-6 sm:space-y-8 text-white relative z-0">
-    <h2 className="crossroad-heading">
-      About The Crossroad <br /> 2025
-    </h2>
-    <p className="crossroad-paragraph">
-      <span className="font-bold text-yellow-400">Crossroad 2025</span> is a groundbreaking tech fest that redefines innovation and creativity. 
-      Uniting global visionaries, it offers an electrifying platform to unveil revolutionary ideas, compete in high-stakes challenges, and forge connections with industry pioneers. 
-      With state-of-the-art workshops, pulse-racing hackathons, and immersive experiences, Crossroad 2025 ignites inspiration and empowers the next generation of innovators to shape the future.
-    </p>
-    <div className="crossroad-glow-effect"></div>
-  </div>
-  <div className="relative">
-    <div className="crossroad-circle">
-      <div className="crossroad-circle-overlay"></div>
-      <div className="text-center space-y-4 z-0">
-        <h3 className="crossroad-circle-title">Crossroad</h3>
-        <p className="crossroad-circle-year">2025</p>
-        <p className="crossroad-circle-subtitle">Innovate & Ignite</p>
-      </div>
-      <div className="crossroad-circle-border"></div>
-      <div className="crossroad-circle-particles"></div>
-    </div>
-  </div>
-</div>
-        <div className="relative flex flex-col md:flex-row justify-between items-center py-10 px-8 bg-gray-800 rounded-3xl mx-auto mt-12 max-w-4xl shadow-lg transition-all duration-300 hover:scale-105 hover:ring-4 hover:ring-purple-500 ring-cyan-500 ring-2">
-          <div className="text-center md:text-left flex-1">
-            <h2 className="text-3xl font-extrabold text-blue-400 hover:text-cyan-400 transition duration-300">
-              Ready to Join?
+
+        <div
+          ref={timerBoxRef}
+          className="relative w-full max-w-2xl mx-auto"
+          style={{
+            background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%)',
+            borderRadius: '24px',
+            padding: '2px',
+          }}
+        >
+          <div
+            className="bg-gray-900/90 backdrop-blur-xl rounded-[22px] p-4 sm:p-6 md:p-8 lg:p-12"
+            style={{
+              boxShadow: '0 0 60px rgba(139, 92, 246, 0.3), inset 0 0 30px rgba(0, 0, 0, 0.5)',
+            }}
+          >
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-500 text-center mb-6 md:mb-8">
+              Registration Open
             </h2>
-            <p className="text-gray-300 text-lg">Experience innovation like never before!</p>
-          </div>
-          <button className="mt-6 md:mt-0 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl hover:scale-110 transition cursor-pointer">
-            <a href="tel:+919876543210">Connect With Us</a>
-          </button>
-        </div>
-      </section>
 
-      <section
-  className="relative w-full py-24 bg-gradient-to-br from-[#0a0015] via-[#1a0b3a] to-[#0f0025] overflow-hidden"
-  onMouseMove={handleMouseMove}
->
-  <div className="absolute inset-0 pointer-events-none">
-    {Array.from({ length: 50 }).map((_, index) => (
-      <div
-        key={index}
-        className="absolute text-cyan-300 opacity-40 text-sm animate-neon-twinkle"
-        style={{
-          top: `${Math.random() * 100}%`,
-          left: `${Math.random() * 100}%`,
-          transform: `translate(${mousePosition.x * 0.05}px, ${mousePosition.y * 0.05}px) scale(${0.6 + Math.random() * 0.4})`,
-        }}
-      >
-        ✦
-      </div>
-    ))}
-  </div>
-{/* 
-  <div className="absolute inset-0 bg-gradient-radial from-cyan-500/10 via-transparent to-transparent animate-pulse-slow"></div> */}
-
-  <h2 className="text-5xl md:text-7xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-500 mb-20 relative z-0  tracking-tighter">
-    Meet Our Tech Titans
-    {/* <span className="block h-1 w-32 mx-auto mt-3 bg-gradient-to-r from-cyan-700 to-purple-700 rounded-full shadow-[0_0_15px_rgba(34,211,238,0.7)]"></span> */}
-  </h2>
-
-  <div className="relative w-full max-w-7xl mx-auto px-6 z-0">
-    <Slider {...sliderSettings}>
-      {teamMembers.map((member) => (
-        <div key={member.id} className="p-6">
-          <div className="relative group bg-gradient-to-br from-[#1a1a2e]/70 via-[#2a2a4e]/50 to-[#3a3a6e]/30 rounded-2xl p-8 text-center backdrop-blur-xl border border-cyan-400/20 transition-all duration-500 hover:scale-105 hover:shadow-[0_0_40px_rgba(34,211,238,0.6)] hover:-rotate-2">
-            {/* <div className="absolute inset-0 bg-gradient-radial from-cyan-400/20 to-transparent blur-3xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div> */}
-
-            <div className="relative w-44 h-44 mx-auto rounded-full border-4 border-cyan-300/50 overflow-hidden transition-all duration-700 group-hover:-translate-y-3 group-hover:scale-110 ">
-              <img src={member.image} alt={member.name} className="object-cover w-full h-full" />
-            </div>
-
-            <h3 className="mt-6 text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-blue-300 tracking-wide transition-colors duration-300 group-hover:from-cyan-300 group-hover:to-blue-400">
-              {member.name}
-            </h3>
-            <p className="mt-3 text-lg text-gray-100 font-medium italic opacity-85 transition-opacity duration-300 group-hover:opacity-100">
-              {member.designation}
-            </p>
-
-            <a
-              href={member.linkedin}
-              className="relative inline-block mt-6 px-10 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-600 transition-all duration-300 hover:scale-110 overflow-hidden"
-            >
-              <span className="relative z-0">WhatsApp</span>
-              <span className="absolute inset-0 bg-cyan-300/30 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center rounded-full"></span>
-            </a>
-          </div>
-        </div>
-      ))}
-    </Slider>
-  </div>
-
-  <style>{`
-    @keyframes neon-twinkle {
-      0%, 100% { opacity: 0.2; transform: scale(0.6); }
-      50% { opacity: 0.7; transform: scale(1.1); }
-    }
-    @keyframes neon-glow {
-      0%, 100% { text-shadow: 0 0 15px rgba(34, 211, 238, 0.6), 0 0 30px rgba(34, 211, 238, 0.4); }
-      50% { text-shadow: 0 0 25px rgba(34, 211, 238, 0.9), 0 0 50px rgba(34, 211, 238, 0.6); }
-    }
-    @keyframes pulse-slow {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 0.5; }
-    }
-    .animate-neon-twinkle {
-      animation: neon-twinkle ${1.5 + Math.random() * 2}s ease-in-out infinite;
-    }
-    .animate-neon-glow {
-      animation: neon-glow 4s ease-in-out infinite;
-    }
-    .animate-pulse-slow {
-      animation: pulse-slow 8s ease-in-out infinite;
-    }
-  `}</style>
-</section>
-
-      {/* <footer className="relative bg-gray-900 text-white py-12 px-6 sm:px-10 lg:px-20 border-t-[5px] border-cyan-500 shadow-2xl">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 text-center sm:text-left">
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-cyan-400 border-b-2 border-cyan-600 pb-2 uppercase tracking-wider animate-fadeIn">
-              Institutional Queries?
-            </h2>
-            <div className="space-y-3">
+            <div className="grid grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6 mb-6 md:mb-8">
               {[
-                { name: 'AMAN GUPTA', phone: '9560472926' },
-                { name: 'HARISH JAYVEER SINGH', phone: '1234567890' },
-                { name: 'CHESHTA SHARMA', phone: '1234567890' },
-              ].map(({ name, phone }) => (
-                <p key={name} className="text-sm sm:text-base font-light">
-                  <span className="text-violet-400 font-medium">{name}:</span>
-                  <a href={`tel:+91${phone}`} className="hover:text-green-400 ml-1 transition-all duration-300 ease-in-out">
-                    {phone}
-                  </a>
-                </p>
+                { value: timeLeft.days, label: 'Days' },
+                { value: timeLeft.hours, label: 'Hours' },
+                { value: timeLeft.minutes, label: 'Minutes' },
+                { value: timeLeft.seconds, label: 'Seconds' }
+              ].map((item, index) => (
+                <motion.div
+                  key={item.label}
+                  className="relative group"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                >
+                  <div
+                    className="relative overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 lg:p-6"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
+                      border: '2px solid rgba(139, 92, 246, 0.3)',
+                      boxShadow: '0 0 20px rgba(139, 92, 246, 0.2)',
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                    <div className="relative z-10">
+                      <motion.div
+                        key={item.value}
+                        initial={{ y: -20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                        className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-orange-500 mb-1 sm:mb-2 text-center"
+                      >
+                        {String(item.value).padStart(2, '0')}
+                      </motion.div>
+                      <div className="text-xs sm:text-sm md:text-base text-orange-400 font-medium text-center">
+                        {item.label}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
               ))}
             </div>
+
+           
           </div>
-          <div className="flex flex-col items-center sm:items-start gap-4">
-            <h2 className="text-lg font-semibold text-cyan-400 border-b-2 border-cyan-600 pb-2 uppercase tracking-wider animate-fadeIn">
-              Quick Links
-            </h2>
-           <div className="flex flex-col items-center sm:items-start gap-2">
-            <Link to="/" className="text-gray-400 text-sm sm:text-base transition-all duration-300 ease-in-out hover:translate-x-1 hover:underline hover:text-cyan-600">
-              Home
-            </Link>
-            <Link to="/event" className="text-gray-400 text-sm sm:text-base transition-all duration-300 ease-in-out hover:translate-x-1 hover:underline hover:text-cyan-600">
-              Event
-            </Link>
-            <Link to="/schedule" className="text-gray-400 text-sm sm:text-base transition-all duration-300 ease-in-out hover:translate-x-1 hover:underline hover:text-cyan-600">
-              Schedule
-            </Link>
-            <Link to="/registration" className="text-gray-400 text-sm sm:text-base transition-all duration-300 ease-in-out hover:translate-x-1 hover:underline hover:text-cyan-600">
-              Registration
-            </Link>
-            <Link to="/contact" className="text-gray-400 text-sm sm:text-base transition-all duration-300 ease-in-out hover:translate-x-1 hover:underline hover:text-cyan-600">
-              Contact
-            </Link>
-            <Link to="/login" className="text-gray-400 text-sm sm:text-base transition-all duration-300 ease-in-out hover:translate-x-1 hover:underline hover:text-cyan-600">
-              Login
-            </Link>
-            </div>
-            <h2
-              className="text-3xl font-extrabold text-amber-400 cursor-pointer tracking-wide transition-transform hover:scale-110 animate-glow border-b-2 border-cyan-400"
-              onClick={() => setIsModalOpen(true)}
+        </div>
+
+        <div className="mt-8 md:mt-12 flex justify-center w-full max-w-md mx-auto px-4">
+          <motion.button
+            className="w-full px-8 py-4 rounded-xl font-semibold text-base sm:text-lg relative overflow-hidden group"
+            style={{
+              background: 'linear-gradient(135deg, rgba(139, 92, 246, 1) 0%, rgba(236, 72, 153, 1) 100%)',
+              border: '2px solid rgba(139, 92, 246, 0.5)',
+              boxShadow: '0 0 30px rgba(139, 92, 246, 0.4)',
+            }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Link to="/event-registration" className="relative z-10">Registration Open</Link>
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </motion.button>
+        </div>
+      </div>
+
+      <section className="relative z-10 py-16 sm:py-20 md:py-24 px-4">
+        <div className="container mx-auto max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12 md:mb-16"
+          >
+            <span className="inline-block px-6 py-2 rounded-full text-sm sm:text-base font-semibold mb-6"
+              style={{
+                background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%)',
+                border: '2px solid rgba(139, 92, 246, 0.3)',
+              }}
             >
-              CROSSROADS
+              About The Event
+            </span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4">
+              <span className="text-white">The Innovative </span>
+              <span className="text-orange-500">Festival</span>
+              <span className="text-white"> of the Year</span>
             </h2>
-            <a href="https://www.hiet.org">
-              <img src={hietlogo} className="w-28 h-28 object-contain rounded-lg bg-white shadow-lg hover:scale-110 transition-transform" alt="HI-TECH Logo" />
-            </a>
-          </div>
-          <div className="text-center">
-            <h2 className="text-lg font-semibold text-cyan-400 border-b-2 border-amber-600 pb-2 uppercase tracking-wider animate-fadeIn">
-              Follow Us
-            </h2>
-            <div className="flex justify-center gap-5 sm:gap-6 mt-4">
-              <a href="https://www.youtube.com/@HiTechCollege" className="text-red-500 hover:text-white transition-transform hover:scale-125" target="_blank" rel="noopener noreferrer">
-                <FaYoutube size={30} />
-              </a>
-              <a href="https://wa.me/9651585712" className="text-green-400 hover:text-white transition-transform hover:scale-125" target="_blank" rel="noopener noreferrer">
-                <FaWhatsapp size={30} />
-              </a>
-              <a href="https://www.linkedin.com/amangupta9454" className="text-blue-400 hover:text-white transition-transform hover:scale-125" target="_blank" rel="noopener noreferrer">
-                <FaLinkedin size={30} />
-              </a>
-              <a href="https://www.instagram.com/gupta_aman_9161" className="text-pink-500 hover:text-white transition-transform hover:scale-125" target="_blank" rel="noopener noreferrer">
-                <FaInstagram size={30} />
-              </a>
-              <a href="mailto:ag0567688@gmail.com" className="text-yellow-400 hover:text-white transition-transform hover:scale-125" target="_blank" rel="noopener noreferrer">
-                <FaEnvelope size={30} />
-              </a>
-            </div>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8 lg:gap-10">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="relative group"
+            >
+              <div
+                className="h-full p-6 sm:p-8 md:p-10 rounded-2xl backdrop-blur-xl"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(249, 115, 22, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%)',
+                  border: '2px solid rgba(249, 115, 22, 0.2)',
+                  boxShadow: '0 0 40px rgba(249, 115, 22, 0.1)',
+                }}
+              >
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-500 mb-6">
+                  What is CROSSROADS?
+                </h3>
+                <div className="space-y-4 text-gray-300 text-sm sm:text-base md:text-lg leading-relaxed">
+                  <p>
+                    CROSSROADS 2025 is our college’s annual technical and cultural fest that celebrates innovation, creativity, and talent. It brings together students from diverse fields to showcase their skills through exciting events, competitions, and performances.
+                  </p>
+                  <p>
+                    From project exhibitions and robotics challenges to dance, music, and art — the fest offers a vibrant platform for young minds to connect, collaborate, and create unforgettable memories.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="relative group"
+            >
+              <div
+                className="h-full p-6 sm:p-8 md:p-10 rounded-2xl backdrop-blur-xl"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%)',
+                  border: '2px solid rgba(139, 92, 246, 0.2)',
+                  boxShadow: '0 0 40px rgba(139, 92, 246, 0.1)',
+                }}
+              >
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600 mb-6">
+                  Why Participate?
+                </h3>
+                <div className="space-y-4">
+                  {[
+                   { text: 'Showcase your talent in technical and cultural events' },
+                   { text: 'Gain hands-on experience and learn from experts' },
+                   { text: 'Win exciting prizes, certificates, and recognition' },
+                   { text: 'Network with students, innovators, and industry mentors' },
+                   { text: 'Be part of an unforgettable two-day college fest experience' }
+                  ].map((item, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="flex items-start gap-3 group/item"
+                    >
+                      <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center"
+                        style={{
+                          background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%)',
+                        }}
+                      >
+                        <Ghost className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
+                      </div>
+                      <p className="text-gray-300 text-sm sm:text-base md:text-lg flex-1 pt-1">
+                        {item.text}
+                      </p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
-        <div className="mt-12 text-center pt-6">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-cyan-400 animate-fadeIn border-b-2 border-amber-600">
-            CROSSROADS<span className="text-amber-400 animate-pulse">@2025</span>
-          </h2>
-          <p className="mt-2 text-sm sm:text-base text-white font-light animate-slideIn border-b-2 border-amber-500">
-            Crossroad is the technical fest of HI-TECH Institute of Engineering and Technology where creativity and innovation meet energy and excitement. With over 20+ years of excellence, this event promises inspiration and growth.
-          </p>
-          <div className="mt-4 text-xs sm:text-sm text-white animate-pulse">
-            © {new Date().getFullYear()} Crossroad Technical Fest. All rights reserved.
-          </div>
-          <div className="mt-2 text-xs sm:text-sm text-white animate-pulse">
-            This website is created by{' '}
-            <a href="https://www.linkedin.com/in/amangupta9454/" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-300">
-              Code Veda
-            </a>.
-          </div>
-          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="mt-6 bg-cyan-500 text-white p-3 rounded-full hover:bg-cyan-600 transition-transform hover:scale-110 shadow-lg animate-bounce cursor-pointer">
-            <FaArrowUp size={24} />
-          </button>
-        </div>
-        {isModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/80 z-50">
-            <div className="bg-gray-900 p-6 rounded-xl max-w-sm w-full mx-4 shadow-xl">
-              <h3 className="text-lg sm:text-xl font-semibold text-cyan-400 mb-3 animate-fadeIn">About CROSSROADS</h3>
-              <p className="text-sm sm:text-base text-gray-200 animate-slideIn">
-                Crossroad 2025 is the flagship technical fest of HI-TECH Institute of Engineering and Technology.
-                It is a platform where students showcase their talent in innovation, technology, and creativity.
-              </p>
-              <button className="mt-4 px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 cursor-pointer" onClick={() => setIsModalOpen(false)}>
-                Close
-              </button>
+      </section>
+
+      <section className="relative z-10 py-12 sm:py-16 md:py-20 px-4">
+        <div className="container mx-auto max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="relative w-full max-w-5xl mx-auto"
+            style={{
+              background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%)',
+              borderRadius: '24px',
+              padding: '2px',
+            }}
+          >
+            <div
+              className="bg-gray-900/90 backdrop-blur-xl rounded-[22px] p-6 sm:p-8 md:p-12 lg:p-16"
+              style={{
+                boxShadow: '0 0 60px rgba(139, 92, 246, 0.3), inset 0 0 30px rgba(0, 0, 0, 0.5)',
+              }}
+            >
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-10">
+                {stats.map((stat, index) => (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    className="flex flex-col items-center text-center group"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <motion.div
+                      className={`w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full flex items-center justify-center mb-4 sm:mb-6 relative overflow-hidden`}
+                      style={{
+                        background: `linear-gradient(135deg, ${stat.bgGradient})`,
+                        border: '2px solid rgba(139, 92, 246, 0.3)',
+                        boxShadow: '0 0 30px rgba(139, 92, 246, 0.2)',
+                      }}
+                      whileHover={{ rotate: 360 }}
+                      transition={{ duration: 0.6 }}
+                    >
+                      <stat.icon className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-${stat.gradient.includes('orange') ? 'orange' : 'purple'}-400`} />
+                    </motion.div>
+
+                    <motion.div
+                      className="text-2xl sm:text-5xl md:text-4xl font-black mb-2 sm:mb-3"
+                      style={{
+                        background: `linear-gradient(135deg, ${stat.gradient})`,
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'white',
+                        backgroundClip: 'text',
+                      }}
+                    >
+                      {stat.value}
+                    </motion.div>
+
+                    <div className="text-base sm:text-lg md:text-xl text-gray-400 font-medium">
+                      {stat.label}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="relative z-10 py-12 sm:py-16 md:py-20 px-4">
+        <div className="container mx-auto max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12 md:mb-16"
+          >
+            <span className="inline-block px-6 py-3 rounded-full text-sm sm:text-base font-semibold mb-6 bg-gradient-to-r from-orange-600 to-orange-500">
+              Win Big
+            </span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4">
+              <span className="text-white">Scary Good </span>
+              <span className="text-orange-500">Prizes</span>
+            </h2>
+            <p className="text-gray-400 text-sm sm:text-base md:text-lg max-w-3xl mx-auto mt-4">
+              Compete for a treasure trove of epic rewards, including cash prizes, cutting-edge gadgets, and career-boosting opportunities that will level up your coding journey!
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-6 md:gap-6 lg:gap-8 max-w-6xl mx-auto">
+            {prizes.map((prize, index) => (
+              <motion.div
+                key={prize.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.15 }}
+                className={`relative ${prize.isWinner ? 'md:-mt-6' : ''}`}
+                whileHover={{ scale: 1.03 }}
+              >
+                <div
+                  className="relative rounded-2xl p-6 sm:p-8 h-full backdrop-blur-xl"
+                  style={{
+                    background: prize.bgGradient,
+                    border: `2px solid ${prize.borderColor}`,
+                    boxShadow: `0 0 40px ${prize.borderColor.replace('0.3', '0.2')}`,
+                  }}
+                >
+                  <div className="flex flex-col items-center text-center">
+                    <motion.div
+                      className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mb-4 sm:mb-6`}
+                      style={{
+                        background: `linear-gradient(135deg, ${prize.gradient})`,
+                        boxShadow: `0 0 30px ${prize.borderColor.replace('0.3', '0.3')}`,
+                      }}
+                      whileHover={{ rotate: 360 }}
+                      transition={{ duration: 0.6 }}
+                    >
+                      <Trophy className={`w-8 h-8 sm:w-10 sm:h-10 text-white`} />
+                    </motion.div>
+
+                    <div className="text-sm sm:text-base text-gray-400 font-medium mb-2">
+                      {prize.place}
+                    </div>
+
+                    <h3
+                      className="text-xl sm:text-2xl md:text-3xl font-bold mb-4"
+                      style={{
+                        background: `linear-gradient(135deg, ${prize.gradient})`,
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                      }}
+                    >
+                      {prize.title}
+                    </h3>
+
+                    <div className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-6">
+                      {prize.amount}
+                    </div>
+
+                    <div className="w-full space-y-3">
+                      {prize.rewards.map((reward, idx) => (
+                        <div
+                          key={idx}
+                          className="text-gray-400 text-sm sm:text-base py-2"
+                        >
+                          {reward}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
-        )}
-      </footer> */}
+        </div>
+      </section>
+
+      <section className="relative z-10 py-12 sm:py-16 md:py-20 px-4">
+        <div className="container mx-auto max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12 md:mb-16"
+          >
+            <span className="inline-block px-6 py-2 rounded-full text-sm sm:text-base font-semibold mb-6"
+              style={{
+                background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%)',
+                border: '2px solid rgba(139, 92, 246, 0.3)',
+              }}
+            >
+              FAQ
+            </span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4">
+              <span className="text-white">Frequently Asked </span>
+              <span className="text-orange-500">Questions</span>
+            </h2>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="relative w-full"
+            style={{
+              background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%)',
+              borderRadius: '24px',
+              padding: '2px',
+            }}
+          >
+            <div
+              className="bg-gray-900/90 backdrop-blur-xl rounded-[22px] p-4 sm:p-6 md:p-8"
+              style={{
+                boxShadow: '0 0 60px rgba(139, 92, 246, 0.3), inset 0 0 30px rgba(0, 0, 0, 0.5)',
+              }}
+            >
+              <div className="space-y-4">
+                {faqs.map((faq, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.05 }}
+                  >
+                    <button
+                      onClick={() => toggleFAQ(index)}
+                      className="w-full text-left p-4 sm:p-6 rounded-xl transition-all duration-300"
+                      style={{
+                        background: openFAQ === index
+                          ? 'linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)'
+                          : 'rgba(255, 255, 255, 0.02)',
+                        border: `2px solid ${openFAQ === index ? 'rgba(249, 115, 22, 0.3)' : 'rgba(139, 92, 246, 0.2)'}`,
+                      }}
+                    >
+                      <div className="flex items-center justify-between gap-4">
+                        <h3 className="text-base sm:text-lg md:text-xl font-semibold text-white">
+                          {faq.question}
+                        </h3>
+                        <motion.div
+                          animate={{ rotate: openFAQ === index ? 180 : 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="flex-shrink-0"
+                        >
+                          <ChevronDown className={`w-5 h-5 sm:w-6 sm:h-6 ${openFAQ === index ? 'text-orange-500' : 'text-gray-400'}`} />
+                        </motion.div>
+                      </div>
+                      <motion.div
+                        initial={false}
+                        animate={{
+                          height: openFAQ === index ? 'auto' : 0,
+                          opacity: openFAQ === index ? 1 : 0,
+                        }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <p className="mt-4 text-sm sm:text-base text-gray-300 leading-relaxed">
+                          {faq.answer}
+                        </p>
+                      </motion.div>
+                    </button>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 };
