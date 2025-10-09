@@ -1,4 +1,4 @@
-import  { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
@@ -6,24 +6,37 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  // Check login status on mount and listen for changes
-  useEffect(() => {
+  // Function to check login status
+  const checkLoginStatus = () => {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     setIsLoggedIn(!!userInfo);
+  };
 
-    // Listen for storage changes (e.g., login/logout in another tab)
-    const handleStorageChange = () => {
-      const updatedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
-      setIsLoggedIn(!!updatedUserInfo);
+  // Check login status on mount and listen for custom auth events
+  useEffect(() => {
+    checkLoginStatus();
+
+    // Listen for custom auth change event
+    const handleAuthChange = () => {
+      checkLoginStatus();
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener('authChange', handleAuthChange);
+
+    // Listen for storage changes (for cross-tab updates)
+    window.addEventListener('storage', handleAuthChange);
+
+    return () => {
+      window.removeEventListener('authChange', handleAuthChange);
+      window.removeEventListener('storage', handleAuthChange);
+    };
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('userInfo');
     setIsLoggedIn(false);
+    // Dispatch custom event
+    window.dispatchEvent(new Event('authChange'));
     navigate('/login');
   };
 
