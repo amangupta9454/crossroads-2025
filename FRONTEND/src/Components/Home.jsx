@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { Calendar, Sparkles, Ghost, Users, Briefcase, Activity, Star, Trophy, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';

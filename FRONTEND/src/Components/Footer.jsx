@@ -1,150 +1,251 @@
-import { useState } from "react";
-import { FaYoutube, FaWhatsapp, FaLinkedin, FaInstagram, FaEnvelope, FaArrowUp, FaPhone } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Phone, Linkedin, Youtube, Instagram, Mail, ArrowUp, MapPin, Calendar, Award } from 'lucide-react';
 
 const Footer = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    return (
-        <footer className="relative bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-10 border-t-[5px] border-cyan-500 shadow-2xl">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 text-center sm:text-left">
-                <div className="space-y-4">
-                    <h2 className="text-lg font-semibold text-cyan-400 border-b-2 border-cyan-600 pb-2 uppercase tracking-wider animate-fadeIn">
-                        Events Queries?
-                    </h2>
-                    <div className="space-y-3">
-                        {[
-                            { name: 'AMAN GUPTA', phone: '9560472926' },
-                            { name: 'HARISH JAYVEER SINGH', phone: '1234567890' },
-                            { name: 'CHESHTA SHARMA', phone: '1234567890' },
-                            { name: 'ANSHIKA YADAV', phone: '34494829299' },
-                            { name: 'MANISH DARGAN', phone: '1234567890' },
-                        ].map(({ name, phone }) => (
-                            <p key={name} className="text-sm sm:text-base font-light">
-                                <span className="text-violet-400 font-medium">{name}:</span>
-                                <a href={`tel:+91${phone}`} className="hover:text-green-400 ml-1 transition-all duration-300 ease-in-out">
-                                    {phone}
-                                </a>
-                            </p>
-                        ))}
+  const studentCoordinators = [
+    { name: 'Rajesh Kumar', phone: '+91 98765 43210' },
+    { name: 'Priya Sharma', phone: '+91 98765 43211' },
+    { name: 'Amit Patel', phone: '+91 98765 43212' },
+    { name: 'Sneha Reddy', phone: '+91 98765 43213' }
+  ];
+
+  const events = [
+    'Technical Workshops',
+    'Paper Presentations',
+    'Project Expo',
+    'Coding Competitions',
+    'Robotics Challenge',
+    'Hackathon'
+  ];
+
+  const socialLinks = [
+    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com' },
+    { name: 'YouTube', icon: Youtube, url: 'https://youtube.com' },
+    { name: 'Instagram', icon: Instagram, url: 'https://instagram.com' },
+    { name: 'Email', icon: Mail, url: 'mailto:crossroads@hitech.edu' }
+  ];
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <footer className="relative bg-gradient-to-b from-[#0f1729] via-[#1a2642] to-[#0a0f1c] text-gray-200 overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
+        <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#ff6b35]/10 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-[#b466ff]/10 rounded-full blur-3xl animate-float-delayed"></div>
+      </div>
+
+      {/* Grid Pattern Overlay */}
+      <div className="absolute inset-0 opacity-5" style={{
+        backgroundImage: 'linear-gradient(#ff6b35 1px, transparent 1px), linear-gradient(90deg, #ff6b35 1px, transparent 1px)',
+        backgroundSize: '50px 50px'
+      }}></div>
+
+      <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 py-8 md:py-10">
+        {/* Main Footer Content - 3 Columns */}
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-8">
+            
+            {/* Column 1: Student Coordinators */}
+            <div className="space-y-4">
+              <h3 className="text-lg md:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff6b35] to-[#ff8c42] relative inline-block pb-2">
+                Student Coordinators
+                <span className="absolute bottom-0 left-0 w-16 h-0.5 bg-gradient-to-r from-[#ff6b35] to-transparent rounded-full"></span>
+              </h3>
+              <div className="space-y-2">
+                {studentCoordinators.map((coordinator, index) => (
+                  <div 
+                    key={index}
+                    className="group bg-[#1a2642]/40 backdrop-blur-sm p-3 rounded-lg border border-gray-800/50 hover:border-[#ff6b35]/50 transition-all duration-300"
+                  >
+                    <p className="font-semibold text-sm text-gray-100 mb-1 group-hover:text-[#ff6b35] transition-colors">
+                      {coordinator.name}
+                    </p>
+                    <div className="flex items-center gap-2 text-xs text-gray-400 group-hover:text-[#ff66c4] transition-colors">
+                      <Phone size={12} />
+                      <a href={`tel:${coordinator.phone}`} className="hover:underline">
+                        {coordinator.phone}
+                      </a>
                     </div>
-                </div>
-                <div className="space-y-4">
-                    <h2 className="text-lg font-semibold text-cyan-400 border-b-2 border-cyan-600 pb-2 uppercase tracking-wider animate-fadeIn">
-                        Technical Queries?
-                    </h2>
-                    <div className="space-y-3">
-                        <p className="text-sm sm:text-base font-light">
-                            <span className="text-violet-400 font-bold text-lg">WhatsApp:</span>
-                            <a href="https://wa.me/9651585712" className="hover:text-green-400 ml-1 transition-all duration-300 ease-in-out text-green-500 font-normal text-lg">
-                                Whatsapp
-                            </a>
-                        </p>
-                        <p className="text-sm sm:text-base font-light">
-                            <span className="text-violet-400 font-bold text-lg">Email:</span>
-                            <a href="mailto:ag0567688@gmail.com" className="hover:text-green-400 ml-1 transition-all duration-300 ease-in-out text-green-500 font-normal text-lg">
-                               Email me
-                            </a>
-                        </p>
-                        <p className="text-sm sm:text-base font-light">
-                            <span className="text-violet-400 font-bold text-lg">Call:</span>
-                            <a href="tel:+919651585712" className="hover:text-green-400 ml-1 transition-all duration-300 ease-in-out text-green-500 font-normal text-lg">
-                               Call Me
-                            </a>
-                        </p>
-                    </div>
-                </div>
-                <div className="flex flex-col items-center sm:items-start gap-4">
-                    <h2 className="text-lg font-semibold text-cyan-400 border-b-2 border-cyan-600 pb-2 uppercase tracking-wider animate-fadeIn">
-                        Quick Links
-                    </h2>
-                    <div className="flex flex-col items-center sm:items-start gap-2">
-                        <Link to="/" className="text-gray-400 text-sm sm:text-base transition-all duration-300 ease-in-out hover:translate-x-1 hover:underline hover:text-cyan-600">
-                            Home
-                        </Link>
-                        <Link to="/event" className="text-gray-400 text-sm sm:text-base transition-all duration-300 ease-in-out hover:translate-x-1 hover:underline hover:text-cyan-600">
-                            Event
-                        </Link>
-                        <Link to="/schedule" className="text-gray-400 text-sm sm:text-base transition-all duration-300 ease-in-out hover:translate-x-1 hover:underline hover:text-cyan-600">
-                            Schedule
-                        </Link>
-                        <Link to="/registration" className="text-gray-400 text-sm sm:text-base transition-all duration-300 ease-in-out hover:translate-x-1 hover:underline hover:text-cyan-600">
-                            Events Registration
-                        </Link>
-                        <Link to="/contact" className="text-gray-400 text-sm sm:text-base transition-all duration-300 ease-in-out hover:translate-x-1 hover:underline hover:text-cyan-600">
-                            Contact
-                        </Link>
-                        <Link to="/login" className="text-gray-400 text-sm sm:text-base transition-all duration-300 ease-in-out hover:translate-x-1 hover:underline hover:text-cyan-600">
-                            Login
-                        </Link>
-                    </div>
-                </div>
-                <div className="text-center">
-                    <h2 className="text-lg font-semibold text-cyan-400 border-b-2 border-amber-600 pb-2 uppercase tracking-wider animate-fadeIn">
-                        Follow Us
-                    </h2>
-                    <div className="flex justify-center gap-5 sm:gap-6 mt-4">
-                        <a href="https://www.youtube.com/@HiTechCollege" className="text-red-500 hover:text-white transition-transform hover:scale-125" target="_blank" rel="noopener noreferrer">
-                            <FaYoutube size={30} />
-                        </a>
-                        <a href="https://wa.me/9651585712" className="text-green-400 hover:text-white transition-transform hover:scale-125" target="_blank" rel="noopener noreferrer">
-                            <FaWhatsapp size={30} />
-                        </a>
-                        <a href="https://www.linkedin.com/amangupta9454" className="text-blue-400 hover:text-white transition-transform hover:scale-125" target="_blank" rel="noopener noreferrer">
-                            <FaLinkedin size={30} />
-                        </a>
-                        <a href="https://www.instagram.com/gupta_aman_9161" className="text-pink-500 hover:text-white transition-transform hover:scale-125" target="_blank" rel="noopener noreferrer">
-                            <FaInstagram size={28} />
-                        </a>
-                        <a href="mailto:ag0567688@gmail.com" className="text-yellow-400 hover:text-white transition-transform hover:scale-125" target="_blank" rel="noopener noreferrer">
-                            <FaEnvelope size={30} />
-                        </a>
-                    </div>
-                    <div className="flex items-center justify-center gap-4 mt-4">
-                        <h2
-                            className="text-3xl font-extrabold text-amber-400 cursor-pointer tracking-wide transition-transform hover:scale-110 animate-glow"
-                            onClick={() => setIsModalOpen(true)}
-                        >
-                            CROSSROADS
-                        </h2>
-                    </div>
-                </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="mt-12 text-center pt-6">
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-cyan-400 animate-fadeIn border-b-2 border-amber-600">
-                    CROSSROADS<span className="text-amber-400 animate-pulse">@2025</span>
-                </h2>
-                <p className="mt-2 text-sm sm:text-base text-white font-light animate-slideIn border-b-2 border-amber-500">
-                    Crossroad is the technical fest of HI-TECH Institute of Engineering and Technology where creativity and innovation meet energy and excitement. With over 20+ years of excellence, this event promises inspiration and growth.
+
+            {/* Column 2: Events & Social Links */}
+            <div className="space-y-6">
+              {/* Events */}
+              <div>
+                <h3 className="text-lg md:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#b466ff] to-[#ff66c4] relative inline-block pb-2 mb-4">
+                  Events
+                  <span className="absolute bottom-0 left-0 w-16 h-0.5 bg-gradient-to-r from-[#b466ff] to-transparent rounded-full"></span>
+                </h3>
+                <div className="grid grid-cols-2 lg:grid-cols-1 gap-2">
+                  {events.map((event, index) => (
+                    <div 
+                      key={index}
+                      className="group flex items-center gap-2 text-sm text-gray-300 hover:text-[#ff6b35] transition-all duration-300 cursor-pointer"
+                    >
+                      <span className="w-1.5 h-1.5 bg-gradient-to-r from-[#ff6b35] to-[#ff66c4] rounded-full group-hover:scale-150 transition-all duration-300"></span>
+                      <span className="group-hover:translate-x-1 transition-transform duration-300">{event}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Follow Us */}
+              <div>
+                <h3 className="text-lg md:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff66c4] to-[#ff6b35] relative inline-block pb-2 mb-4">
+                  Follow Us
+                  <span className="absolute bottom-0 left-0 w-16 h-0.5 bg-gradient-to-r from-[#ff66c4] to-transparent rounded-full"></span>
+                </h3>
+                <div className="flex gap-3">
+                  {socialLinks.map((social, index) => (
+                    <a
+                      key={index}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group bg-[#1a2642]/40 backdrop-blur-sm p-3 rounded-lg border border-gray-800/50 hover:border-[#ff6b35]/50 transition-all duration-300 hover:scale-110"
+                    >
+                      <social.icon 
+                        size={20} 
+                        className="text-gray-300 group-hover:text-[#ff6b35] transition-colors duration-300"
+                      />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Column 3: Event Info Card */}
+            <div className="md:col-span-2 lg:col-span-1">
+              <div className="relative bg-gradient-to-br from-[#ff6b35]/15 via-[#b466ff]/10 to-[#ff66c4]/15 backdrop-blur-md p-5 rounded-xl border border-[#ff6b35]/30 hover:border-[#ff6b35]/60 transition-all duration-500 group hover:scale-105">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#ff6b35]/0 via-[#ff6b35]/20 to-[#ff6b35]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-shimmer rounded-xl"></div>
+                
+                <div className="relative z-10">
+                  <h2 className="text-2xl md:text-3xl font-black mb-3">
+                    <span className="text-[#ff6b35]">CROSSROADS</span>
+                    <span className="text-yellow-400">@</span>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#b466ff] to-[#ff66c4]">2025</span>
+                  </h2>
+                  <div className="h-0.5 w-20 bg-gradient-to-r from-[#ff6b35] via-[#b466ff] to-[#ff66c4] rounded-full mb-4"></div>
+                  
+                  <div className="space-y-3">
+                    <div className="bg-[#0f1729]/50 p-3 rounded-lg border border-[#ff6b35]/20">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Award className="text-[#ff6b35] w-4 h-4" />
+                        <p className="text-xs text-gray-400 font-semibold">EVENT</p>
+                      </div>
+                      <p className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff6b35] to-[#ff66c4]">
+                        Crossroad Technical Fest
+                      </p>
+                    </div>
+                    
+                    <div className="bg-[#0f1729]/50 p-3 rounded-lg border border-[#b466ff]/20">
+                      <div className="flex items-center gap-2 mb-1">
+                        <MapPin className="text-[#b466ff] w-4 h-4" />
+                        <p className="text-xs text-gray-400 font-semibold">CAMPUS</p>
+                      </div>
+                      <p className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#b466ff] to-[#ff66c4]">
+                        HI-TECH Institute of Engineering and Technology
+                      </p>
+                    </div>
+                    
+                    <div className="bg-[#0f1729]/50 p-3 rounded-lg border border-[#ff66c4]/20">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Calendar className="text-[#ff66c4] w-4 h-4" />
+                        <p className="text-xs text-gray-400 font-semibold">DATE</p>
+                      </div>
+                      <p className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff66c4] to-[#ff6b35]">
+                        November 28, 2025
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-gradient-to-r from-transparent via-[#ff6b35]/50 to-transparent mb-6"></div>
+
+          {/* Bottom Section */}
+          <div className="space-y-5">
+            {/* Event Description */}
+            <div className="text-center max-w-4xl mx-auto">
+              <h2 className="text-xl md:text-2xl font-black mb-3">
+                <span className="text-[#ff6b35]">CROSSROADS</span>
+                <span className="text-yellow-400">@</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#b466ff] to-[#ff66c4]">2025</span>
+              </h2>
+              <div className="h-px w-full max-w-xl mx-auto bg-gradient-to-r from-transparent via-[#ff6b35] to-transparent mb-4"></div>
+              <p className="text-gray-300 text-xs md:text-sm leading-relaxed">
+                Crossroad is the technical fest of HI-TECH Institute of Engineering and Technology where creativity and innovation meet energy and excitement. With over 20+ years of excellence, this event promises inspiration and growth.
+              </p>
+            </div>
+
+            <div className="h-px bg-gradient-to-r from-transparent via-[#ff6b35]/30 to-transparent"></div>
+
+            {/* Copyright & Scroll to Top */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+              <div className="space-y-1 text-xs text-gray-400">
+                <p>© 2025 Crossroad Technical Fest. All rights reserved.</p>
+                <p className="text-gray-500">
+                  Created by{' '}
+                  <a 
+                    href="#" 
+                    className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff6b35] to-[#ff66c4] font-bold hover:underline"
+                  >
+                    Code Veda
+                  </a>
                 </p>
-                <div className="mt-4 text-xs sm:text-sm text-white animate-pulse">
-                    © {new Date().getFullYear()} Crossroad Technical Fest. All rights reserved.
-                </div>
-                <div className="mt-2 text-xs sm:text-sm text-white animate-pulse">
-                    This website is created by{' '}
-                    <a href="https://www.linkedin.com/in/amangupta9454/" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-300">
-                        Code Veda
-                    </a>.
-                </div>
-                <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="mt-6 bg-cyan-500 text-white p-3 rounded-full hover:bg-cyan-600 transition-transform hover:scale-110 shadow-lg animate-bounce cursor-pointer">
-                    <FaArrowUp size={24} />
-                </button>
+              </div>
+
+              <button
+                onClick={scrollToTop}
+                className="group bg-gradient-to-r from-[#00d4ff] to-[#0099cc] hover:from-[#00e5ff] hover:to-[#00bbee] p-2.5 rounded-full shadow-lg hover:shadow-[#00d4ff]/50 transition-all duration-300 hover:scale-110 hover:-translate-y-1"
+                aria-label="Scroll to top"
+              >
+                <ArrowUp size={18} className="text-white" />
+              </button>
             </div>
-            {isModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black/80 z-50">
-                    <div className="bg-gray-900 p-6 rounded-xl max-w-sm w-full mx-4 shadow-xl">
-                        <h3 className="text-lg sm:text-xl font-semibold text-cyan-400 mb-3 animate-fadeIn">About CROSSROADS</h3>
-                        <p className="text-sm sm:text-base text-gray-200 animate-slideIn">
-                            Crossroad 2025 is the flagship technical fest of HI-TECH Institute of Engineering and Technology.
-                            It is a platform where students showcase their talent in innovation, technology, and creativity.
-                        </p>
-                        <button className="mt-4 px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 cursor-pointer" onClick={() => setIsModalOpen(false)}>
-                            Close
-                        </button>
-                    </div>
-                </div>
-            )}
-        </footer>
-    );
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translate(0, 0); }
+          50% { transform: translate(20px, -20px); }
+        }
+        
+        @keyframes float-delayed {
+          0%, 100% { transform: translate(0, 0); }
+          50% { transform: translate(-20px, 20px); }
+        }
+        
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        
+        .animate-float {
+          animation: float 8s ease-in-out infinite;
+        }
+        
+        .animate-float-delayed {
+          animation: float-delayed 10s ease-in-out infinite;
+        }
+        
+        .animate-shimmer {
+          animation: shimmer 3s linear infinite;
+        }
+      `}</style>
+    </footer>
+  );
 };
 
 export default Footer;
